@@ -27,8 +27,6 @@
             <div class="section-body">
                 <h2 class="section-title">Product</h2>
 
-
-
                 <div class="card">
                     <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf

@@ -40,7 +40,7 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make($request->input('password'));
         User::create($data);
-        return redirect()->route('user.index');
+        return redirect()->route('user.index')->with('success', 'User added successfully');
     }
 
     // show
@@ -69,13 +69,18 @@ class UserController extends Controller
             $data['password'] = $user->password;
         }
         $user->update($data);
-        return redirect()->route('user.index');
+        return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
 
     public function destroy($id)
     {
-       $user = User::findOrFail($id);
-       $user->delete();
-       return redirect()->route('user.index');
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return redirect()->route('user.index')->with('success', 'User deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('user.index')->with('error', 'Failed to delete the user');
+        }
     }
 }

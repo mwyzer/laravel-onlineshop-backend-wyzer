@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -34,7 +35,61 @@ class ProductController extends Controller
         $product -> image = $filename;
         $product -> save();
 
-        return redirect()->route('product.index');
+        return redirect()->route('product.index')->with('success', 'Product added successfully');
+    }
 
+    //edit
+    public function edit($id)
+    {
+        $product = \App\Models\Product::findOrFail($id);
+        $categories = \App\Models\Category::all();
+        $filename = $product->image;
+
+        return view('pages.product.edit', compact('product', 'categories', 'filename'));
+    }
+
+    //update
+    public function update(Request $request, $id) {
+        $product = \App\Models\Product::findOrFail($id);
+
+        // Validate other fields if needed
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            // Add validation rules for other fields
+        ]);
+
+        // Update the 'image' attribute only if a new image is provided
+        if ($request->hasFile('image')) {
+            $filename = time() . '.' . $request->image->extension();
+            $request->image->storeAs('public/products', $filename);
+            $product->image->$filename;
+
+            // Delete the old image if it exists
+            if ($product->image) {
+                Storage::delete('public/products/' . $product->image);
+            }
+
+            $validated['image'] = $filename;
+        }
+
+        $product->update($validated);
+
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
+    }
+
+    // destroy
+    public function destroy($id)
+    {
+        try {
+            $product = \App\Models\Product::findOrFail($id);
+            $product->delete();
+
+            return redirect()->route('product.index')->with('success', 'Product deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with('error', 'Failed to delete the product');
+        }
     }
 }
+
+
+;
