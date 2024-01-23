@@ -51,6 +51,20 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label>Description</label>
+                                <input type="text"
+                                    class="form-control @error('name')
+                            is-invalid
+                                is-invalid
+                            @enderror"
+                                    name="descripton" value="{{ $product->description }}">
+                                @error('descripton')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label>Price</label>
                                 <input type="number"
                                     class="form-control @error('price')
@@ -95,9 +109,9 @@
                                 <div class="col-sm-9">
                                     <input type="file" class="form-control" name="image"
                                         @error('image') is-invalid @enderror>
-                                        @if(isset($filename))
+                                    @if (isset($filename))
                                         <p>Current Image: {{ $filename }}</p>
-                                        @endif
+                                    @endif
                                 </div>
                                 @error('image')
                                     <div class="invalid-feedback">

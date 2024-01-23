@@ -60,7 +60,6 @@
                                         <tr>
 
                                             <th>Name</th>
-
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>

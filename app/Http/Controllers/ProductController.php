@@ -4,15 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = \App\Models\Product::paginate(10);
-        return view('pages.product.index', compact('products'));
+        $query = \App\Models\Product::with('category'); // Eager load the category relationship
+
+        // Check if a search term is provided in the request
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        $products = $query->paginate(10);
+
+        // Pass the search term to the view for displaying in the search input
+        $searchTerm = $request->input('search');
+
+        return view('pages.product.index', compact('products', 'searchTerm'));
     }
+    // {
+    //     $products = DB::table('users')
+    //     ->when($request->input('search'), function ($query, $search) {
+    //         return $query->where(function ($query) use ($search) {
+    //             $query->where('name', 'like', '%' . $search . '%');
+    //         });
+    //     })
+    //     ->paginate(10);
+
+    //     // $products = \App\Models\Product::paginate(10);
+
+    //     return view('pages.product.index', compact('products'));
+    // }
 
     public function create()
     {
@@ -62,6 +88,9 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $filename = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/products', $filename);
+
+            ddd($request->image);
+
             $product->image->$filename;
 
             // Delete the old image if it exists
@@ -89,7 +118,4 @@ class ProductController extends Controller
             return redirect()->route('product.index')->with('error', 'Failed to delete the product');
         }
     }
-}
-
-
-;
+};

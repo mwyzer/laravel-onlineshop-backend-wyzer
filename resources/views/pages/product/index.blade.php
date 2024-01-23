@@ -59,6 +59,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Category Name</th>
+                                            <th>Description</th>
                                             <th>Price</th>
                                             <th>Stock</th>
                                             <th>Created At</th>
@@ -70,6 +71,9 @@
                                                 <td>{{ $product->name }}
                                                 </td>
                                                 <td>{{ $product->category->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $product->description }}
                                                 </td>
                                                 <td>{{ $product->price }}
                                                 </td>
