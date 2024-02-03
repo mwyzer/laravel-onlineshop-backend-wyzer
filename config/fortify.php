@@ -145,7 +145,13 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        Features::registration([
+            // 'email' => [
+            //     'required' => 'Dimohon untuk masukkan alamat email.',
+            //     'email' => 'Mohon masukkan alamat email yang valid.',
+            //     'unique' => 'Alamat email sudah digunakan.',
+            // ]
+        ]),
         Features::resetPasswords(),
         // Features::emailVerification(),
         Features::updateProfileInformation(),
@@ -156,5 +162,4 @@ return [
             // 'window' => 0,
         ]),
     ],
-
 ];
