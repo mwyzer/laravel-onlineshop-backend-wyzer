@@ -36,5 +36,7 @@ Route::get('/categories', [\App\Http\Controllers\Api\CategoryController::class, 
 Route::get('/products', [\App\Http\Controllers\Api\ProductController::class, 'index']);
 
 
+//address
+Route::apiResource('addresses', App\Http\Controllers\Api\AddressController::class)->middleware('auth:sanctum');
 
 
