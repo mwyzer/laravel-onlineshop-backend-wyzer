@@ -35,8 +35,11 @@ Route::get('/categories', [\App\Http\Controllers\Api\CategoryController::class, 
 //product
 Route::get('/products', [\App\Http\Controllers\Api\ProductController::class, 'index']);
 
-
-//address
+//address apiResource
 Route::apiResource('addresses', App\Http\Controllers\Api\AddressController::class)->middleware('auth:sanctum');
 
+//order
+Route::post('/order', [App\Http\Controllers\Api\OrderController::class, 'order'])->middleware('auth:sanctum');
 
+//callback midtrans
+Route::post('/callback', [App\Http\Controllers\Api\CallbackController::class, 'callback']);
