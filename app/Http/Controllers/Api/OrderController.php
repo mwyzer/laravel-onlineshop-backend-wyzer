@@ -59,7 +59,7 @@ class OrderController extends Controller
             ]);
         }
 
-        // request ke midtrans
+        // request to midtrans
         $midtrans = new CreateVAService($order->load('user', 'orderItems'));
         $apiResponse = $midtrans->getVA();
 
@@ -70,6 +70,26 @@ class OrderController extends Controller
         return response()->json([
             'message' => 'Order created successfully',
             'order' => $order,
+        ]);
+    }
+
+    // function for get order by id
+    public function getOrderById($id)
+    {
+        $order = Order::with('orderItems.product')->find($id);
+
+        return response()->json([
+            'order' => $order,
+        ]);
+    }
+
+    //function for check status order by id
+    public function checkStatusOrder($id)
+    {
+        $order = Order::find($id);
+
+        return response()->json([
+            'status' => $order->status,
         ]);
     }
 }
